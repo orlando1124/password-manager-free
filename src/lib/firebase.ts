@@ -1,8 +1,6 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-// import other services if needed (storage, functions, etc.)
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,12 +10,11 @@ const firebaseConfig = {
   storageBucket: "password-manager-free.firebasestorage.app",
   messagingSenderId: "150901815504",
   appId: "1:150901815504:web:a2cf6806aff4256dd346d5",
-  measurementId: "G-SP6SGGLZMR"
+  measurementId: "G-SP6SGGLZMR",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Ensure we don’t re-init on hot reloads
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize services
 export const auth = getAuth(app);
 export const db = getFirestore(app);
