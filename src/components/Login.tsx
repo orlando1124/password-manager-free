@@ -16,8 +16,7 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setError("");
-      alert("Logged in successfully!");
-      router.push("/dashboard");
+      router.replace("/dashboard");
     } catch (err: any) {
       setError(err.message);
     }
