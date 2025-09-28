@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Credential, CredentialFormData } from "@/types/credential";
 import { CredentialsService } from "@/lib/credentials";
 import { useAuth } from "@/context/AuthContext";
@@ -14,22 +14,12 @@ export default function Credentials() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [isLoading, setIsLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [editingCredential, setEditingCredential] = useState<{ id: string; data: CredentialFormData } | null>(null);
+  const [editingCredential, setEditingCredential] = useState<{ id: string; data: CredentialFormData } | undefined>(undefined);
   const [showPassword, setShowPassword] = useState<{ [key: string]: boolean }>({});
 
   const categories = ["All", "Social Media", "Work", "Banking", "Shopping", "Entertainment", "Education", "Other"];
 
-  useEffect(() => {
-    if (user) {
-      loadCredentials();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    filterCredentials();
-  }, [credentials, searchTerm, selectedCategory]);
-
-  const loadCredentials = async () => {
+  const loadCredentials = useCallback(async () => {
     if (!user) return;
     
     setIsLoading(true);
@@ -41,9 +31,15 @@ export default function Credentials() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
 
-  const filterCredentials = () => {
+  useEffect(() => {
+    if (user) {
+      loadCredentials();
+    }
+  }, [user, loadCredentials]);
+
+  const filterCredentials = useCallback(() => {
     let filtered = credentials;
 
     if (searchTerm) {
@@ -59,7 +55,12 @@ export default function Credentials() {
     }
 
     setFilteredCredentials(filtered);
-  };
+  }, [credentials, searchTerm, selectedCategory]);
+
+  useEffect(() => {
+    filterCredentials();
+  }, [filterCredentials]);
+
 
   const handleDelete = async (credentialId: string) => {
     if (!user) return;
@@ -105,13 +106,13 @@ export default function Credentials() {
 
   const handleCredentialAdded = () => {
     setShowAddForm(false);
-    setEditingCredential(null);
+    setEditingCredential(undefined);
     loadCredentials();
   };
 
   const handleCancel = () => {
     setShowAddForm(false);
-    setEditingCredential(null);
+    setEditingCredential(undefined);
   };
 
   if (isLoading) {

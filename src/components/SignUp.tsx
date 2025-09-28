@@ -16,8 +16,8 @@ export default function SignUp() {
       await createUserWithEmailAndPassword(auth, email, password);
       setSuccess("Account created successfully!");
       setError("");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred during sign up');
       setSuccess("");
     }
   };

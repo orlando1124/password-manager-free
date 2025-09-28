@@ -6,7 +6,6 @@ import {
   doc, 
   getDocs, 
   query, 
-  where, 
   orderBy,
   serverTimestamp 
 } from 'firebase/firestore';
@@ -20,15 +19,21 @@ export class CredentialsService {
 
   static async addCredential(userId: string, credentialData: CredentialFormData): Promise<string> {
     try {
+      console.log('Adding credential for user:', userId);
+      console.log('Credential data:', credentialData);
+      
       const docRef = await addDoc(this.getCredentialsCollection(userId), {
         ...credentialData,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
+      
+      console.log('Credential added successfully with ID:', docRef.id);
       return docRef.id;
     } catch (error) {
       console.error('Error adding credential:', error);
-      throw new Error('Failed to add credential');
+      console.error('Error details:', error);
+      throw new Error(`Failed to add credential: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

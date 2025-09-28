@@ -17,8 +17,8 @@ export default function Login() {
       await signInWithEmailAndPassword(auth, email, password);
       setError("");
       router.replace("/dashboard");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred during login');
     }
   };
 
@@ -81,7 +81,7 @@ export default function Login() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <a href="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
                 Sign up
               </a>

@@ -42,7 +42,7 @@ export default function AddCredential({ onCredentialAdded, onCancel, editingCred
       const newPassword = PasswordGenerator.generatePassword(passwordOptions);
       setFormData(prev => ({ ...prev, password: newPassword }));
       setShowPasswordGenerator(false);
-    } catch (err) {
+    } catch {
       setError('Failed to generate password');
     }
   };
@@ -50,7 +50,7 @@ export default function AddCredential({ onCredentialAdded, onCancel, editingCred
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-    } catch (err) {
+    } catch {
       setError('Failed to copy to clipboard');
     }
   };
@@ -69,7 +69,7 @@ export default function AddCredential({ onCredentialAdded, onCancel, editingCred
         await CredentialsService.addCredential(user.uid, formData);
       }
       onCredentialAdded();
-    } catch (err) {
+    } catch {
       setError('Failed to save credential');
     } finally {
       setIsLoading(false);

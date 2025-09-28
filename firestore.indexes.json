@@ -1,0 +1,20 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "credentials",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "site",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
+
